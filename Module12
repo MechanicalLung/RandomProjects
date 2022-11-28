@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cctype>
-#include <string>
-#include <iomanip>
+#include <cstring>
 
 using namespace std;
 
@@ -9,52 +8,48 @@ const char part1[] = "Dear ";
 const char part2[] = "Our records show that your account has a"
                      " balance of $";
 const char part3[] = " and a past due ammount of $";
-const char part4[] = ". Your last payment was on ";
-const char part5[] = ". Please pay the past-due ammount as soon as possible.\n\n";
+const char part4[] = "Your last payment was on ";
+const char part5[] = "Please pay the past-due amount as soon as possible.\n\n";
 const char part6[] = "Please ignore this letter if you have already sent payment.\n";
 const char part7[] = "Sincerely,\n\n";
 const char part8[] = "Blue Star Electric";                     
 
-const int SIZE = 50;
+void printLine(const char *, int&);
 void getInfo(char *, char *, char *, char *, char *);
-void printLetter(const char[], const char[], const char[], const char[], const char[], const char[], const char[], const char[], char[], char[], char[], char[], char[]);
+void printLetter(char *, char *, char *, char *, char *);
 
 
 int main()
 {
 
-    int position = 0;
 
-char firstName[SIZE],
-     lastName[SIZE],
-     lastPayment[SIZE],
-     balance[SIZE],
-     pastDue[SIZE],
-     again,
-     *FNptr = nullptr,               //pointers used to get value from the getInfo function.
-     *LNptr = nullptr,
-     *LPptr = nullptr,
-     *Bptr = nullptr,
-     *PDptr = nullptr;
+//constant ints for the character arrays to hold the values. 
+const int NSIZE = 15,
+          PDATE = 14,
+          BSIZE = 8;
+
+
+
+char firstName[NSIZE],
+     lastName[NSIZE],
+     lastPayment[PDATE],
+     balance[BSIZE],
+     pastDue[BSIZE],
+     again;                          //Holds the answer for Y or N
+
 
 do
 {
     getInfo(firstName, lastName, lastPayment, balance, pastDue);
 
-FNptr = firstName;
-LNptr = lastName;
-LPptr = lastPayment;
-Bptr = balance;
-PDptr = pastDue;
-
-printLetter(part1, part2, part3, part4, part5, part6, part7, part8, firstName, lastName, lastPayment, balance, pastDue);
+printLetter(firstName, lastName, lastPayment, balance, pastDue);
 
 
 cout << "\nWould you like to print another letter? Press Y or N: ";
 cin >> again;
 while(toupper(again) != 'Y' && toupper(again) != 'N')
 {
-    cout << "Please enter in Y or N.\n";
+    cout << "\nPlease enter in Y or N.\n";
     cin >> again;
 }
 
@@ -64,13 +59,14 @@ while(toupper(again) != 'Y' && toupper(again) != 'N')
 
 
 
-
+return 0;
 
 
 
 
 }
 
+//This function is to get the information regarding the customer.
 
 
 void getInfo(char *fname, char *lname, char *lPay, char *bLance, char *pDoo)
@@ -78,37 +74,98 @@ void getInfo(char *fname, char *lname, char *lPay, char *bLance, char *pDoo)
 
 cout << "What is the customer's first name? Enter in here: ";
 cin >> fname;
+fname[0] = toupper(fname[0]);
 cout << "\nWhat is the customer's last name? Enter in here: ";
 cin >> lname;
-cout << "\nWhen was the customer's last payment? Enter in date here: ";
+lname[0] = toupper(lname[0]);
+cout << "\nWhen was the customer's last payment? Enter in date here (MM/DD/YYYY): ";
 cin >> lPay;
 cout << "\nWhat is the customer's balance? Enter in here: ";
 cin >> bLance;
-cout << "\nWhat is the past due ammount? Enter in  here: ";
+cout << "\nWhat is the past due amount? Enter in  here: ";
 cin >> pDoo;
-
-
-}
-
-
-void printLetter(const char p1[], const char p2[], const char p3[], const char p4[], const char p5[], const char p6[], const char p7[], const char p8[], char fname[], char lname[], char lPay[], char bLance[], char pDue[])
-{
-
-    int length;
-
-    length = strlen(p1) + strlen(fname) + strlen(lname) + 3;
-
-cout << setw(15);
-cout << p1 << fname << " " << lname << ": \n\n";
-cout << setw(63);
-cout << p2 << bLance << p3 << pDue << endl;
-
-
+cout << "\n";
 
 }
 
-int printLine(int count)
+//Function printLetter, this function will call the printLine function for formatting, and wrapping.
+//It will also print the characters.
+
+
+void printLetter(char fname[], char lname[], char lPay[], char bLance[], char pDoo[])
 {
 
+   int position;
+
+   position = 0;                       //to signal a start of a new line, position is set to 0.
+    printLine(part1, position);
+    cout << fname << " " << lname << ":\n\n";
+
+    position = 0;                      //again starting a new line.
+    printLine(part2, position);
+    cout << bLance; 
+
+    position += strlen(bLance);
+    printLine(part3, position);
+    cout << pDoo << ". ";
+    position += strlen(pDoo) + 2;      //+ 2 is to take in account for the period and the space
+
+    printLine(part4, position);
+    cout << lPay << ". "; 
+
+    position += strlen(lPay) + 2;
+    printLine(part5, position);
+
+    position = 0;                       //ALMOST THERE, REMEMBER TO SET POSITION TO 0 FOR NEW LINES
+    printLine(part6, position);
     
+    position = 0;
+    printLine(part7, position);
+
+    position = 0;
+    printLine(part8, position);
+    cout << "\n\n";                 //just to make it look a little nicer if you decide to start a new one.
+
+}
+
+//This printLine function is important for the formatting, and also performs a soft word wrap.
+
+
+void printLine(const char *line, int &sCount)         //*line is a pointer to position
+{
+
+
+const int LEFTM = 10,
+          RIGHTM = 70,
+          WORDWRAP = 60;
+
+          int cCount = 0;
+
+          if(sCount >= RIGHTM)
+          {
+            cout << "\n";
+            sCount = 0;
+          }
+
+          while(line[cCount] != '\0')
+          {
+
+            if (sCount >= WORDWRAP && line[cCount] == ' ')
+            {
+                cout << " \n";
+                cCount++;
+                sCount = 0;
+            }
+            if (sCount == 0)
+            {
+                cout << " ";
+                sCount = LEFTM;
+            }
+                cout.put(line[cCount]);
+                cCount++;
+                sCount++;
+
+          }
+
+
 }
