@@ -1,0 +1,114 @@
+#include <iostream>
+#include <cctype>
+#include <string>
+#include <iomanip>
+
+using namespace std;
+
+const char part1[] = "Dear ";
+const char part2[] = "Our records show that your account has a"
+                     " balance of $";
+const char part3[] = " and a past due ammount of $";
+const char part4[] = ". Your last payment was on ";
+const char part5[] = ". Please pay the past-due ammount as soon as possible.\n\n";
+const char part6[] = "Please ignore this letter if you have already sent payment.\n";
+const char part7[] = "Sincerely,\n\n";
+const char part8[] = "Blue Star Electric";                     
+
+const int SIZE = 50;
+void getInfo(char *, char *, char *, char *, char *);
+void printLetter(const char[], const char[], const char[], const char[], const char[], const char[], const char[], const char[], char[], char[], char[], char[], char[]);
+
+
+int main()
+{
+
+    int position = 0;
+
+char firstName[SIZE],
+     lastName[SIZE],
+     lastPayment[SIZE],
+     balance[SIZE],
+     pastDue[SIZE],
+     again,
+     *FNptr = nullptr,               //pointers used to get value from the getInfo function.
+     *LNptr = nullptr,
+     *LPptr = nullptr,
+     *Bptr = nullptr,
+     *PDptr = nullptr;
+
+do
+{
+    getInfo(firstName, lastName, lastPayment, balance, pastDue);
+
+FNptr = firstName;
+LNptr = lastName;
+LPptr = lastPayment;
+Bptr = balance;
+PDptr = pastDue;
+
+printLetter(part1, part2, part3, part4, part5, part6, part7, part8, firstName, lastName, lastPayment, balance, pastDue);
+
+
+cout << "\nWould you like to print another letter? Press Y or N: ";
+cin >> again;
+while(toupper(again) != 'Y' && toupper(again) != 'N')
+{
+    cout << "Please enter in Y or N.\n";
+    cin >> again;
+}
+
+
+
+} while(toupper(again) == 'Y');
+
+
+
+
+
+
+
+
+}
+
+
+
+void getInfo(char *fname, char *lname, char *lPay, char *bLance, char *pDoo)
+{
+
+cout << "What is the customer's first name? Enter in here: ";
+cin >> fname;
+cout << "\nWhat is the customer's last name? Enter in here: ";
+cin >> lname;
+cout << "\nWhen was the customer's last payment? Enter in date here: ";
+cin >> lPay;
+cout << "\nWhat is the customer's balance? Enter in here: ";
+cin >> bLance;
+cout << "\nWhat is the past due ammount? Enter in  here: ";
+cin >> pDoo;
+
+
+}
+
+
+void printLetter(const char p1[], const char p2[], const char p3[], const char p4[], const char p5[], const char p6[], const char p7[], const char p8[], char fname[], char lname[], char lPay[], char bLance[], char pDue[])
+{
+
+    int length;
+
+    length = strlen(p1) + strlen(fname) + strlen(lname) + 3;
+
+cout << setw(15);
+cout << p1 << fname << " " << lname << ": \n\n";
+cout << setw(63);
+cout << p2 << bLance << p3 << pDue << endl;
+
+
+
+}
+
+int printLine(int count)
+{
+
+    
+}
