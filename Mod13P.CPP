@@ -18,6 +18,8 @@ const double RON_BASE = 350.00,
              TONY_BASE = 700.00,
              TONY_EQUIP = 40.00;     //per day a person
 
+bool COX_ANS1 = false,
+     COX_ANS2 = false;
              
 void burgundy();
 void scott();
@@ -93,7 +95,7 @@ void burgundy()
              cout << "\t========================================\n\n";
              cout << "How many people are in the group: ";
              cin >> NumPE;
-             if(NumPE <= 0)
+             while(NumPE <= 0)
              {
                 cout << "Invalid Selection, please enter a number greater than 0: ";
                 cin >> NumPE;
@@ -111,7 +113,7 @@ void burgundy()
              }
 
 B_CHARGE = NumPE * RON_BASE;
-E_CHARGE = NumPE * RON_EQUIP;               
+E_CHARGE = NumPE * RON_EQUIP;
 L_CHARGE = NumL * RON_LEAD;
 CHARGE = B_CHARGE + L_CHARGE + E_CHARGE;
 
@@ -137,11 +139,11 @@ void scott()
              cout << "\t===========================================\n\n";
              cout << "How many people are in the group: ";
              cin >> NumPE;
-             if(NumPE <= 0)
-             {
+            while(NumPE <= 0)
+                {
                 cout << "Invalid Selection, please enter a number greater than 0: ";
                 cin >> NumPE;
-             }
+                }
              cout << "\n";
              cout << "How many will require leadership instruction: ";
              cin >> NumL;
@@ -171,9 +173,10 @@ int NUM_P,
     NUM_L,
     NUM_LUX,
     LDAYS,
-    LUXDAYS;
+    LUXDAYS = 0;
 
     char answer;
+    bool Lodge = false;
 
 double BCHARGE,
        LODGING,
@@ -182,54 +185,100 @@ double BCHARGE,
 
        cout << "\tDr.Cox Presents Man Not Caring Retreat\n";
        cout << "\t======================================\n\n";
-      
-       do{ 
        cout << "How many people are in the group: ";
        cin >> NUM_P;
        cout << endl;
-       if(NUM_P <= 0)
+       while(NUM_P <= 0)
        {
-        cout << "Please enter in a number greater than 0: ";
+        cout << "Invalid number for group size. Please enter in a number greater than 0: ";
         cin >> NUM_P;
        }
-       }while(NUM_P <= 0);
-       
+
        cout << "There is normal lodging, and luxury lodging.\n";
        cout <<  "How many people will be doing normal lodging: ";
        cin >> NUM_L;
-       
-       if(NUM_L > NUM_P || NUM_L <=0)
+    
+    if(NUM_L == NUM_P)
+    {
+        COX_ANS2 = true;
+        COX_ANS1 = true;
+    }
+   
+    while(NUM_L > NUM_P)
        {
-            cout << "Please enter in a number from 1 to " << NUM_P << " :";
+            cout << "The number of people lodging cannot be greater than " << NUM_P << ", Please enter in a valid number: ";
             cin >> NUM_L;
        }
-       cout << "For how many days will lodging be required: ";
-       cin >> LDAYS;
-       if(LDAYS <= 0)
-       {
-        cout << "Please enter in a valid amount of days: ";
+    if(NUM_L > 0)
+    {
+        Lodge = true;
+        COX_ANS2 = true;
+    }
+    
+    if(Lodge == true)
+    {
+        cout << "For how many days will lodging be required: ";
         cin >> LDAYS;
-       }
-       
-       
-       if(NUM_L != NUM_P)
-       {
+        
+        while(LDAYS <= 0)
+           {
+            cout << "Please enter in a valid amount of days: ";
+            cin >> LDAYS;
+           }
+        while(COX_ANS1 == false && NUM_L < NUM_P)
+        {
+             
+             cout << "Will the remaining guest in the group be in luxury lodging? (Y/N): ";
+             cin >> answer;
+             if(toupper(answer) == 'Y')
+             {
+             NUM_LUX = NUM_P - NUM_L;
+             COX_ANS1 = true;
+             COX_ANS2 = true;
+             cout << "How many days will luxury lodging be required: ";
+             cin >> LUXDAYS;
+             while(LUXDAYS <= 0)
+                 {
+                 cout << "Please enter in a valid amount of days: ";
+                 cin >> LUXDAYS;
+                 }
+             }
+            else
+                COX_ANS1 = true;
+                COX_ANS2 = true;
+                NUM_L = NUM_P;
+                cout << "Advise that lodging is required, and it will add charges to normal lodging.\n\n";
             
-            cout << "Will the remaining guest in the group be in luxury lodging? (Y/N): ";
-            cin >> answer;
-            if(toupper(answer) == 'Y')
-            {
-            NUM_LUX = NUM_P - NUM_L;
-
-            cout << "How many days will luxury lodging be required: ";
-            cin >> LUXDAYS;
-            while(LUXDAYS <= 0)
-            {
-                cout << "Please enter in a valid amount of days: ";
-                cin >> LUXDAYS; 
-            }
-            }
-       }
+        }
+    }
+    
+    while(COX_ANS2 == false)
+    {
+        
+             cout << "Will the whole group be in luxury lodging? (Y/N): ";
+             cin >> answer;
+             if(toupper(answer) == 'Y')
+             {
+                 COX_ANS2 = true;
+             cout << "How many days will luxury lodging be required: ";
+             cin >> LUXDAYS;
+             while(LUXDAYS <= 0)
+                 {
+                 cout << "Please enter in a valid amount of days: ";
+                 cin >> LUXDAYS;
+                 }
+             }
+        else
+            NUM_L = NUM_P;
+            cout << "Advise that lodging is required, and it will add charges to normal lodging.\n\n";
+        COX_ANS2 = true;
+        
+    }
+    
+    
+       
+       
+      
             
         
 
@@ -247,12 +296,18 @@ double BCHARGE,
 
         cout << "There are " << NUM_P << " in the group.\n";
         cout << "The base charge is $" << BCHARGE << endl;
+    if(Lodge == true)
         cout << "The charge for the lodging is $" << LODGING << endl;
         if(toupper(answer) == 'Y')
         {
             cout << "The charge for the luxury lodging is $" << LUX_LODGE << endl;
         }
         cout << "The total charge is $" << CHARGE << "\n\n";
+    
+    COX_ANS1 = false;
+    COX_ANS2 = false;
+    Lodge = false;
+    answer = 'n';
 
 
     }
@@ -274,7 +329,7 @@ double BCHARGE,
        cout << "\tTony Johnson's I Really Don't Care Retreat\n";
        cout << "\t==========================================\n\n";
       
-       do{ 
+       do{
        cout << "How many people are in the group: ";
        cin >> NUM_G;
        cout << endl;
@@ -288,7 +343,7 @@ double BCHARGE,
        cout << "How many people require equipment: ";
        cin >> NUM_E;
        
-       if(NUM_E > NUM_G || NUM_E <=0)
+       while(NUM_E > NUM_G || NUM_E <=0)
        {
             cout << "Please enter in a number from 1 to " << NUM_G << " :";
             cin >> NUM_E;
@@ -296,7 +351,7 @@ double BCHARGE,
        do{
        cout << "How many days will the equipment be needed for: ";
        cin >> EDAYS;
-       if(EDAYS <= 0)
+       while(EDAYS <= 0)
        {
         cout << "Please enter in a valid amount of days: ";
         cin >> EDAYS;
