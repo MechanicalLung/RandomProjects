@@ -1,0 +1,70 @@
+#include <iostream>
+#include <string>
+
+
+
+int findShort(std::string);
+
+int main()
+{
+
+int smallest;
+
+std::string Phrase = "Fucking Assholes Biggest Mississippi Journey Rivindale";
+
+
+std::cout << "The next line is the phrase being read. It will give us the smallest word length." << std::endl;
+std::cout << Phrase << std::endl;
+
+smallest = findShort(Phrase);
+
+std::cout<< "Smallest is " << smallest << " letters long.\n";
+
+
+
+}
+
+
+int findShort(std::string str)
+{
+
+int count = 0,
+ small,
+ store;
+
+int Size = str.size();
+
+for(int i = 0; i < Size; i++ )
+    {
+        if(str[i] != ' ')
+        count++;
+        if(str[i] == ' ')
+       { 
+        store = count;
+        count = 0;
+        if(store != 0 && store < small)
+        {
+            small = store;
+            }
+              }
+         
+    }
+        
+    return small;
+    }
+
+
+
+
+//Describe(Tests)
+//{
+  //It(Sample_Test_Cases)
+  //{
+    //Assert::That(find_short("bitcoin take over the world maybe who knows perhaps"), Equals(3));
+    //Assert::That(find_short("turns out random test cases are easier than writing out basic ones"), Equals(3));
+    //Assert::That(find_short("lets talk about javascript the best language"), Equals(3));
+    //Assert::That(find_short("i want to travel the world writing code one day"), Equals(1));
+    //Assert::That(find_short("Lets all go on holiday somewhere very cold"), Equals(2));
+    //Assert::That(find_short("Let's travel abroad shall we"), Equals(2));
+  //}
+//};
